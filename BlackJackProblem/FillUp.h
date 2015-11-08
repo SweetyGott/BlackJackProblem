@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SequenzCreator.h"
+#include "Config.h"
 
 class FillUp {
 
@@ -11,7 +12,7 @@ private:
 	int globsucces, globfail;
 	int* stack;
 	int* cards;
-	int* tocards[6];//Zu setzende Karten
+	int* tocards[NumFillUpCards];//Zu setzende Karten
 	int points[7];	//Punktestand
 
 	ofstream myfile;

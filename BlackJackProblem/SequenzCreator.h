@@ -7,7 +7,18 @@
 
 using namespace std;
 
-#define SolSize 105000
+
+/**Estimated anzahl Sequents
+2		6000
+3		100000
+4		500000
+5		900000
+6		1700000
+7		7000000
+8		7000000
+9		0
+*/
+
 
 class SequenzCreator {
 	/*
@@ -25,8 +36,10 @@ private:
 	//0-9 Flexset
 	//10-29 Spezialsequenz
 	//30-39 Stack der verlbeibenden Karten
-	int solutions[SolSize][NumCards+10];
 
+	int(*solutions)[NumCards + 10];
+	//int solutions[SolSize][NumCards+10];
+	int SolutionSpace;
 	ofstream myfile;
 
 

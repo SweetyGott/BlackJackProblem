@@ -10,6 +10,20 @@ SequenzCreator::SequenzCreator( int _n ) {
 	n = _n;
 	n_big = n + 10;
 
+	switch (n)
+	{
+	case 2: SolutionSpace = 10000; break;
+	case 3:	SolutionSpace = 100000; break;
+	case 4:	SolutionSpace = 500000; break;
+	case 5:	SolutionSpace = 900000; break;
+	case 6:	SolutionSpace = 1700000; break;
+	case 7:	SolutionSpace = 7000000; break;
+	case 8:	SolutionSpace = 7000000; break;
+	case 9:	SolutionSpace = 1000; break;
+	default:	SolutionSpace = 1; break;
+	}
+	solutions = new int[SolutionSpace][NumCards + 10];;
+
 	numSolutions = 0;
 
 	seq = tempsol + SeqStart;
@@ -18,6 +32,8 @@ SequenzCreator::SequenzCreator( int _n ) {
 		stack[i] = 4;
 	}
 	stack[9] = 16;
+	stack[0]--;
+	stack[10 - n - 1]--;
 
 	string s = "C:\\Users\\Jens\\Fuffi\\Informatikstudium\\Semester7 - WS1516\\Bachelorarbeit_BlackJack\\SolutionSequenz";
 	s += '0' + n;
@@ -60,19 +76,32 @@ int SequenzCreator::checkSequenz( int i, int confirmed ) {
 void SequenzCreator::setValue(const int i, const int _confirmed) {
 	//Jede Karte zuweisen
 	if (i < NumCards-SeqStart) {
-		//Falls 
-		if (i == 3 || i == 5) {
-			//Hier wird explizit ein Wert zugewiesen
+		//Falls Einer der 3 zu setzenden
+		if ( i == 1 || i == 3 || i == 5) {
+			//Hier wird explizit ein Wert zugewiesen 
 			int j = 10 - n;
-			if (stack[j] > 0) {
-				stack[j]--;
+			if (stack[j-1] > 0 && stack[0] > 0) {
+				stack[j-1]--;
+				stack[0]--;
+				//1
 				seq[i] = j;
+				tempsol[5 + (i - 1) / 2] = 1;
 				/**Check Sequnz**/
 				int confirmed = checkSequenz(i, _confirmed);
 				if (confirmed != -1) {
 					setValue(i + 1, confirmed);
 				}
-				stack[j]++;
+				//2
+				seq[i] = 1;
+				tempsol[5 + (i - 1) / 2] = j;
+					/**Check Sequnz**/
+				confirmed = checkSequenz(i, _confirmed);
+				if (confirmed != -1) {
+					setValue(i + 1, confirmed);
+				}
+
+				stack[j-1]++;
+				stack[0]++;
 			}
 		} else {
 			//versch. Werte durchtesten
@@ -94,23 +123,23 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 		}
 	} else {
 		//Alle Karten erfolgreich belegt :-)
-		if (numSolutions < SolSize) {
+		if (numSolutions < SolutionSpace) {
 			char s[2*(NumCards-SeqStart)+1];
 			for (int j = 0; j < 20; j++) {
 				s[2 * j] = '0' + seq[j];
 				s[2 * j + 1] = '\t';
-				solutions[numSolutions][SeqStart+j] = seq[j];
 			}
 			s[39] = '\n';
 			s[40] = '\0';
 			myfile << s;
-			for (int j = 0; j < 10; j++) {
-				solutions[numSolutions][NumCards + j] = stack[1 + j];
+
+			for (int j = 0; j < NumCards + 10; j++) {
+				solutions[numSolutions][j] = tempsol[j];
 			}
 
 			numSolutions++;
 		} else {
-			string s = "Attention! More than 10000 Solutions found. SolNum: ";
+			string s = "Attention! More than x Solutions found. SolNum: ";
 			s += 0 + numSolutions;
 			s += '\n';
 			myfile << s;

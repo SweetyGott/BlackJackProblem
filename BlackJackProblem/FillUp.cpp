@@ -14,6 +14,7 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 	myfile.open( s );
 	
 	int z = 1;
+	cout << "0%, done! Startinth with: " << n << " ....." << endl;
 	//Alle Lösungen testen
 	for (int i = 0; i < sC->getAnzahlSol(); i++) {
 		//Progress-Output
@@ -30,20 +31,14 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 		tocards[1] = &cards[1];
 		tocards[2] = &cards[2];
 		tocards[3] = &cards[3];
-		tocards[4] = &cards[5];
-		tocards[5] = &cards[8];
-
-		//Zweit Karten auf Ass setzen
-		cards[6] = 1;
-		cards[7] = 1;
-		stack[0] -= 2;
+		tocards[4] = &cards[8];
 
 		//Die beiden Orangen setzen
-		stack[0]--;
-		stack[10 - n - 2];
+		//stack[0]--;//Zu beginn ein Ass weniger ;-)
+		//stack[10 - n - 1]--;
 		//1
 		cards[4] = 1;
-		cards[9] = 1 - n;
+		cards[9] = 10 - n;
 		nextnum();
 		//2
 		cards[9] = 1;
@@ -58,8 +53,8 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 
 void FillUp::nextnum(int num ) {
 	//Setzen der 6 freien Variablen
-	if (num < 6) {
-		for (int i = 1; i <= 10; i++) {
+	if (num < NumFillUpCards) {
+		for (int i = 2; i <= 10; i++) {
 			if (stack[i - 1] > 0) {
 				*tocards[num] = i;
 				stack[i - 1]--;
@@ -71,7 +66,7 @@ void FillUp::nextnum(int num ) {
 	//Teste die Möglichkeit
 	else {
 
-		if (checkNumPlayer(4) && checkNumPlayer(6) && checkNumPlayer(7)) {
+		if (checkNumPlayer(4) && checkNumPlayer(5) && checkNumPlayer(6) && checkNumPlayer(7)) {
 			globsucces++;
 			
 			char s[61];
