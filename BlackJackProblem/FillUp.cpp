@@ -31,7 +31,8 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 		tocards[1] = &cards[1];
 		tocards[2] = &cards[2];
 		tocards[3] = &cards[3];
-		tocards[4] = &cards[8];
+		tocards[4] = &cards[5];
+		tocards[5] = &cards[8];
 
 		//Die beiden Orangen setzen
 		//stack[0]--;//Zu beginn ein Ass weniger ;-)
@@ -66,7 +67,7 @@ void FillUp::nextnum(int num ) {
 	//Teste die Möglichkeit
 	else {
 
-		if (checkNumPlayer(4) && checkNumPlayer(5) && checkNumPlayer(6) && checkNumPlayer(7)) {
+		if (checkNumPlayer(4) /*&& checkNumPlayer(5)*/ && checkNumPlayer(6) && checkNumPlayer(7)) {
 			globsucces++;
 			
 			char s[61];

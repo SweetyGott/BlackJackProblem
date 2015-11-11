@@ -13,12 +13,12 @@ SequenzCreator::SequenzCreator( int _n ) {
 	switch (n)
 	{
 	case 2: SolutionSpace = 10000; break;
-	case 3:	SolutionSpace = 100000; break;
-	case 4:	SolutionSpace = 500000; break;
+	case 3:	SolutionSpace = 1000000; break;
+	case 4:	SolutionSpace = 5000000; break;
 	case 5:	SolutionSpace = 900000; break;
-	case 6:	SolutionSpace = 1700000; break;
-	case 7:	SolutionSpace = 7000000; break;
-	case 8:	SolutionSpace = 7000000; break;
+	case 6:	SolutionSpace = 3500000; break;
+	case 7:	SolutionSpace = 70000000; break;
+	case 8:	SolutionSpace = 70000000; break;
 	case 9:	SolutionSpace = 1000; break;
 	default:	SolutionSpace = 1; break;
 	}
@@ -32,6 +32,7 @@ SequenzCreator::SequenzCreator( int _n ) {
 		stack[i] = 4;
 	}
 	stack[9] = 16;
+	//Die beiden Karten, die wir im Fillup verwenden, aber schon bekannt sind
 	stack[0]--;
 	stack[10 - n - 1]--;
 
@@ -77,7 +78,7 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 	//Jede Karte zuweisen
 	if (i < NumCards-SeqStart) {
 		//Falls Einer der 3 zu setzenden
-		if ( i == 1 || i == 3 || i == 5) {
+		if ( /*i == 1 ||*/ i == 3 || i == 5) {
 			//Hier wird explizit ein Wert zugewiesen 
 			int j = 10 - n;
 			if (stack[j-1] > 0 && stack[0] > 0) {
