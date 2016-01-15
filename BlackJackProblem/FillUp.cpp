@@ -87,15 +87,15 @@ void FillUp::nextnum(int num ) {
 
 // arg Anzahl Spieler: Anzahl der SPieler gegen die Bank
 bool FillUp::checkNumPlayer(int anzspieler) {
-	/**Es reicht aus auf nur ein Ass zu testen
-	Bei mehreren kann nur ein Ass als Zehner wirken
-	**/
-	bool ass = false;
 
 	int start = anzspieler * 2 + 2;
 	int latestplay = start;
 
 	for (int i = 0; i < anzspieler; i++) {//Jeden Spieler testen
+		/**Es reicht aus auf nur ein Ass zu testen
+		Bei mehreren kann nur ein Ass als Zehner wirken
+		**/
+		bool ass = false;
 		if (cards[i] == 1 || cards[(anzspieler + 1) + i] == 1) {
 			ass = true;
 		}
