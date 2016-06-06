@@ -7,13 +7,12 @@
 
 using namespace std;
 
-int main(int argv, char** argc) {
-	
-
+int main(int argc, char** argv) {
 	int n = 2;
-	for (int n = 2; n <= 9; n++) {
-		SequenzCreator* SequenzCreate = new SequenzCreator(n);
-		FillUp* SolutionCalc = new FillUp(SequenzCreate, n);
+	int e = 9;
+	for (int i = n; i <= e; i++) {
+		SequenzCreator* SequenzCreate = new SequenzCreator(i);
+		FillUp* SolutionCalc = new FillUp(SequenzCreate, i);
 	}
 	
 

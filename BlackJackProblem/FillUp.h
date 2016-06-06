@@ -8,11 +8,10 @@ public:
 	FillUp( SequenzCreator*, int );
 private:
 
-	int globsucces, globfail;
-	int* stack;
-	int* cards;
+	uint64_t globsucces, globfail;
+	solution* sol;
 	int* tocards[6];//Zu setzende Karten
-	int points[7];	//Punktestand
+	int points[7];	//Punktestand der einzelnen Spieler
 
 	ofstream myfile;
 

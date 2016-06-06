@@ -8,7 +8,8 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 	globsucces = 0;
 	globfail = 0;
 
-	string s = "C:\\Users\\Jens\\Fuffi\\Informatikstudium\\Semester7 - WS1516\\Bachelorarbeit_BlackJack\\SolutionFinal";
+	string s = PATH;
+	s += "SolutionFinal";
 	s += '0' + n;
 	s += ".txt";
 	myfile.open( s );
@@ -23,32 +24,31 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 		}
 
 		//PointerStruktur
-		cards = sC->getSolution(i);
-		stack = cards + NumCards;
-		//Verweise auf die 6 zu setzende Karten
-		tocards[0] = &cards[0];
-		tocards[1] = &cards[1];
-		tocards[2] = &cards[2];
-		tocards[3] = &cards[3];
-		tocards[4] = &cards[5];
-		tocards[5] = &cards[8];
+		sol = sC->getSolution(i);
+		
+		//Zu setzende Spielerkarten
+		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[5];
+		tocards[5] = &sol->seq[8];
+		
+		
+		//Zu setzende Bankstartkarten
+		if (sol->stack[0] > 0 && sol->stack[11 - n - 2] > 0) {
+			sol->stack[0]--;
+			sol->stack[11 - n - 2]--;
 
-		//Zweit Karten auf Ass setzen
-		cards[6] = 1;
-		cards[7] = 1;
-		stack[0] -= 2;
+			sol->seq[9] = 1;
+			sol->seq[4] = 10 - n;
+			nextnum();
 
-		//Die beiden Orangen setzen
-		stack[0]--;
-		stack[10 - n - 2];
-		//1
-		cards[4] = 1;
-		cards[9] = 1 - n;
-		nextnum();
-		//2
-		cards[9] = 1;
-		cards[4] = 10 - n;
-		nextnum();
+			sol->seq[4] = 1;
+			sol->seq[9] = 10 - n;
+			nextnum();
+		}
+
 	}
 	
 	cout << "Finished mit "<< n << " -- " << globsucces << " Loesungen gefunden -- " << globfail << " gescheitert!" << endl;
@@ -60,11 +60,11 @@ void FillUp::nextnum(int num ) {
 	//Setzen der 6 freien Variablen
 	if (num < 6) {
 		for (int i = 1; i <= 10; i++) {
-			if (stack[i - 1] > 0) {
+			if (sol->stack[i - 1] > 0) {
 				*tocards[num] = i;
-				stack[i - 1]--;
+				sol->stack[i - 1]--;
 				nextnum(num + 1);
-				stack[i - 1]++;
+				sol->stack[i - 1]++;
 			}
 		}
 	}
@@ -76,7 +76,7 @@ void FillUp::nextnum(int num ) {
 			
 			char s[61];
 			for (int j = 0; j < 30; j++) {
-				s[2 * j] = '0' + cards[j];
+				s[2 * j] = '0' + sol->seq[j];
 				s[2 * j + 1] = '\t';
 			}
 			s[59] = '\n';
@@ -100,10 +100,10 @@ bool FillUp::checkNumPlayer(int anzspieler) {
 	int latestplay = start;
 
 	for (int i = 0; i < anzspieler; i++) {//Jeden Spieler testen
-		if (cards[i] == 1 || cards[(anzspieler + 1) + i] == 1) {
+		if (sol->seq[i] == 1 || sol->seq[(anzspieler + 1) + i] == 1) {
 			ass = true;
 		}
-		points[i] = cards[i] + cards[(anzspieler + 1) + i];
+		points[i] = sol->seq[i] + sol->seq[(anzspieler + 1) + i];
 
 		int l;
 		for (int j = start; j <= latestplay; j++) {	//Jeden Einstiegspunkt durchlaufen
@@ -114,10 +114,10 @@ bool FillUp::checkNumPlayer(int anzspieler) {
 				if (ass && k == 11) {
 					return false; //Falls Ass im Deck und 11 erreicht werden kann
 				}
-				if (cards[j + l] == 1) {
+				if (sol->seq[j + l] == 1) {
 					ass = true;
 				}
-				k += cards[j + l];
+				k += sol->seq[j + l];
 				l++;
 			} 
 			if (k == 21) {

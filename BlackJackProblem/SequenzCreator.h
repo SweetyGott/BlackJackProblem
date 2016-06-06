@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <bitset>
 
 using namespace std;
 
@@ -17,15 +19,12 @@ class SequenzCreator {
 private:
 	int n, n_big;
 
-	int tempsol[NumCards + 10];
-	int* stack;
-	int* seq;
+	solution temp_sol;
 
-	int numSolutions;
-	//0-9 Flexset
-	//10-29 Spezialsequenz
-	//30-39 Stack der verlbeibenden Karten
-	int solutions[SolSize][NumCards+10];
+	uint64_t numSolutions;
+
+	std::vector<solution> sol;
+	std::bitset<NumCards> set_mask;
 
 	ofstream myfile;
 
@@ -33,9 +32,12 @@ private:
 	void setValue( const int = 0, const int = 0 );
 	int checkSequenz(int, int);
 
+	std::bitset<NumCards> startwert_mask;
+	std::bitset<NumCards> manual_mask;
+
 public:
 	SequenzCreator( int );
-	int* getSolution(int);
+	solution* getSolution(int);
 	int getAnzahlSol();
 
 
