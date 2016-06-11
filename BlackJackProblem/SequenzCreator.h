@@ -9,7 +9,6 @@
 
 using namespace std;
 
-#define SolSize 105000
 
 class SequenzCreator {
 	/*
@@ -35,10 +34,18 @@ private:
 	std::bitset<NumCards> startwert_mask;
 	std::bitset<NumCards> manual_mask;
 
+	//Measuring
+	uint64_t gesamtTest;
+	uint64_t tiefe[NumCards - SeqStart + 1];
+
+	//Dateiausgabe
+	int numData;
+	string s, se;
+
 public:
 	SequenzCreator( int );
-	solution* getSolution(int);
-	int getAnzahlSol();
+	solution* getSolution(uint64_t);
+	uint64_t getAnzahlSol();
 
 
 };

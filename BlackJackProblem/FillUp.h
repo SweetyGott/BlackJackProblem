@@ -12,6 +12,8 @@ private:
 	solution* sol;
 	int* tocards[6];//Zu setzende Karten
 	int points[7];	//Punktestand der einzelnen Spieler
+	
+	uint64_t success[7];//Wie viele Erfolglösungen für den einzelnen Spieler gefunden wurden
 
 	ofstream myfile;
 

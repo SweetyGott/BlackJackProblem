@@ -8,11 +8,16 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 	globsucces = 0;
 	globfail = 0;
 
+	for (int i = 0; i < 7; i++) {
+		points[i] = 0;
+		success[i] = 0;
+	}
+
 	string s = PATH;
 	s += "SolutionFinal";
 	s += '0' + n;
 	s += ".txt";
-	myfile.open( s );
+	myfile.open( s + to_string(n) + ".txt" );
 	
 	int z = 1;
 	//Alle Lösungen testen
@@ -25,15 +30,6 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 
 		//PointerStruktur
 		sol = sC->getSolution(i);
-		
-		//Zu setzende Spielerkarten
-		tocards[0] = &sol->seq[0];
-		tocards[1] = &sol->seq[1];
-		tocards[2] = &sol->seq[2];
-		tocards[3] = &sol->seq[3];
-		tocards[4] = &sol->seq[5];
-		tocards[5] = &sol->seq[8];
-		
 		
 		//Zu setzende Bankstartkarten
 		if (sol->stack[0] > 0 && sol->stack[11 - n - 2] > 0) {
@@ -49,10 +45,23 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 			nextnum();
 		}
 
+		//Zu setzende Spielerkarten
+		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[5];
+		tocards[5] = &sol->seq[8];
+		
+
 	}
 	
 	cout << "Finished mit "<< n << " -- " << globsucces << " Loesungen gefunden -- " << globfail << " gescheitert!" << endl;
 	myfile << "Finished -- " << globsucces << " Loesungen gefunden -- " << globfail << " gescheitert!" << endl;
+	myfile << "Erfolgsquote bei " << globsucces / (double)(globsucces + globfail) << endl;
+	for (int i = 0; i < 7; i++) {
+		myfile << "Für " << i+1 << " Spieler: " << success[i] << "Lösungen gefunden" << endl;
+	}
 	myfile.close();
 }
 
@@ -100,6 +109,7 @@ bool FillUp::checkNumPlayer(int anzspieler) {
 	int latestplay = start;
 
 	for (int i = 0; i < anzspieler; i++) {//Jeden Spieler testen
+		//Hat der Spieler ein Ass auf der Starthand?
 		if (sol->seq[i] == 1 || sol->seq[(anzspieler + 1) + i] == 1) {
 			ass = true;
 		}
@@ -107,7 +117,7 @@ bool FillUp::checkNumPlayer(int anzspieler) {
 
 		int l;
 		for (int j = start; j <= latestplay; j++) {	//Jeden Einstiegspunkt durchlaufen
-			//Test auf 21			-- Strenger Möglich mit dem Test auf 11 beim Ass, erstmal vernachlaessigt
+			//Test auf 21			
 			int k = points[i];
 			l = 0;
 			while ( k < 21 && j+l < NumCards ) {
@@ -127,5 +137,6 @@ bool FillUp::checkNumPlayer(int anzspieler) {
 		latestplay += l;
 	}
 
+	success[anzspieler - 1]++;
 	return true;
 }
