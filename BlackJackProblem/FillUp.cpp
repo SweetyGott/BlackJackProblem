@@ -15,8 +15,8 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 
 	string s = PATH;
 	s += "SolutionFinal";
-	s += '0' + n;
-	s += ".txt";
+	//s += '0' + n;
+	//s += ".txt";
 	myfile.open( s + to_string(n) + ".txt" );
 	
 	int z = 1;
@@ -45,14 +45,31 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 			nextnum();
 		}
 
-		//Zu setzende Spielerkarten
+		//Zu setzende Spielerkarten bei 4,5,6,7
+		/*tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[8];*/
+
+		//Zu setzende Spielerkarten bei 5,6,7
 		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[4];
+		tocards[5] = &sol->seq[8];
+		tocards[6] = &sol->seq[9];
+		tocards[7] = &sol->seq[10];
+
+		//Zu setzende Spielerkarten bei 4,6,7
+		/*tocards[0] = &sol->seq[0];
 		tocards[1] = &sol->seq[1];
 		tocards[2] = &sol->seq[2];
 		tocards[3] = &sol->seq[3];
 		tocards[4] = &sol->seq[5];
 		tocards[5] = &sol->seq[8];
-		
+		*/
 
 	}
 	
@@ -66,8 +83,8 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 }
 
 void FillUp::nextnum(int num ) {
-	//Setzen der 6 freien Variablen
-	if (num < 6) {
+	//Setzen der F freien Variablen
+	if (num < F) {
 		for (int i = 1; i <= 10; i++) {
 			if (sol->stack[i - 1] > 0) {
 				*tocards[num] = i;
@@ -79,8 +96,7 @@ void FillUp::nextnum(int num ) {
 	}
 	//Teste die Möglichkeit
 	else {
-
-		if (checkNumPlayer(4) && checkNumPlayer(6) && checkNumPlayer(7)) {
+		if ( /* checkNumPlayer(4) &&*/ checkNumPlayer(5) && checkNumPlayer(6) && checkNumPlayer(7)) {
 			globsucces++;
 			
 			char s[61];
@@ -121,14 +137,15 @@ bool FillUp::checkNumPlayer(int anzspieler) {
 			int k = points[i];
 			l = 0;
 			while ( k < 21 && j+l < NumCards ) {
-				if (ass && k == 11) {
-					return false; //Falls Ass im Deck und 11 erreicht werden kann
-				}
 				if (sol->seq[j + l] == 1) {
 					ass = true;
 				}
 				k += sol->seq[j + l];
 				l++;
+
+				if (ass && k == 11) {
+					return false; //Falls Ass im Deck und 11 erreicht werden kann
+				}
 			} 
 			if (k == 21) {
 				return false;

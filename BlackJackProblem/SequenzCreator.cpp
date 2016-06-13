@@ -45,7 +45,7 @@ SequenzCreator::SequenzCreator( int _n ) {
 	numData = 0;
 	s = PATH;
 	s += "SolutionSequenz";
-	s += '0' + n;
+	//s += '0' + n;
 	se = ".txt";
 	myfile.open( s + to_string(n) + "-" + to_string(numData) + se );
 
@@ -188,7 +188,7 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 
 		//Write to SolutionVector
 		if(sol.size() <= sol.max_size()) {
-			//sol.push_back(temp_sol);
+			sol.push_back(temp_sol);
 		}
 		else {
 			cout << "maximale Anzahl an Lösunge gefunden, Speicherproblem" << endl;

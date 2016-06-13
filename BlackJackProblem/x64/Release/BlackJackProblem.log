@@ -1,4 +1,4 @@
-﻿Der Buildvorgang wurde am 11.06.2016 15:22:34 gestartet.
+﻿Der Buildvorgang wurde am 13.06.2016 11:13:51 gestartet.
      1>Projekt "C:\Users\Jens\Fuffi\Informatikstudium\Semester7 - WS1516\Bachelorarbeit_BlackJack\BlackJackProblem\BlackJackProblem\BlackJackProblem.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt FillUp.cpp
@@ -8,13 +8,13 @@
          x64\Release\main.obj
          x64\Release\SequenzCreator.obj
          Code wird generiert.
-         18 of 228 functions ( 7.9%) were compiled, the rest were copied from previous compilation.
+         3 of 272 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
            0 functions were new in current compilation
-           8 functions had inline decision re-evaluated but remain unchanged
+           0 functions had inline decision re-evaluated but remain unchanged
          Codegenerierung ist abgeschlossen.
          BlackJackProblem.vcxproj -> C:\Users\Jens\Fuffi\Informatikstudium\Semester7 - WS1516\Bachelorarbeit_BlackJack\BlackJackProblem\BlackJackProblem\x64\Release\BlackJackProblem.exe
      1>Die Erstellung von Projekt "C:\Users\Jens\Fuffi\Informatikstudium\Semester7 - WS1516\Bachelorarbeit_BlackJack\BlackJackProblem\BlackJackProblem\BlackJackProblem.vcxproj" ist abgeschlossen (Build Ziel(e)).
 
 Der Buildvorgang wurde erfolgreich ausgeführt.
 
-Verstrichene Zeit 00:00:01.27
+Verstrichene Zeit 00:00:01.15

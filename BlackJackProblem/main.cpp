@@ -12,9 +12,9 @@ int main(int argc, char** argv) {
 	int e = 9;
 	for (int i = n; i <= e; i++) {
 		SequenzCreator* SequenzCreate = new SequenzCreator(i);
-		//FillUp* SolutionCalc = new FillUp(SequenzCreate, i);
+		FillUp* SolutionCalc = new FillUp(SequenzCreate, i);
 		delete SequenzCreate;
-		//delete SolutionCalc;
+		delete SolutionCalc;
 	}
 	
 
