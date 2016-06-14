@@ -18,7 +18,9 @@ SequenzCreator::SequenzCreator( int _n ) {
 		n = _n;
 		n_big = _n + 10;
 	}
-	
+	//Werte der Bank
+	j2 = 1;
+	j1 = 21 - n_big - j2;
 
 	numSolutions = 0;
 
@@ -108,14 +110,11 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 			//21-n_big Punkte verteilt auf einmal Ass(1) und einmal (21-n_big-1) Punkte
 			short p2 = i;
 			short p1 = (i - 1) / 2;
-			int j2 = 1;
-			int j1 = 21 - n_big - j2;
+			
 
 			if (temp_sol.stack[j2-1] > 0 && temp_sol.stack[j1 - 1] > 0 ) {
 				temp_sol.stack[j2 - 1]--;
 				temp_sol.stack[j1 - 1]--;
-				//set_mask[p1] = true;
-				//set_mask[p2] = true;
 
 				//Zwei Startwerte setzen
 				temp_sol.seq[p1] = j2;
@@ -139,9 +138,6 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 					tiefe[i - SeqStart]++;
 					gesamtTest++;
 				}
-
-				//set_mask[p1] = false;
-				//set_mask[p2] = false;
 				temp_sol.stack[j2 - 1]++;
 				temp_sol.stack[j1 - 1]++;
 			}

@@ -17,6 +17,7 @@ class SequenzCreator {
 	*/
 private:
 	int n, n_big;
+	int j1, j2;
 
 	solution temp_sol;
 
