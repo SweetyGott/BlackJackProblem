@@ -27,10 +27,7 @@ private:
 
 	ofstream myfile;
 
-
-	void setValue( const int, const int );
-	int checkSequenz(int, int);
-
+	//Bitmaske für die Karten, welche durch die Bank definiert werden (Menge B)
 	std::bitset<NumCards> startwert_mask;
 
 	//Measuring
@@ -40,6 +37,11 @@ private:
 	//Dateiausgabe
 	int numData;
 	string s, se;
+
+	//Nächste Karte für die Sequenz setzen
+	void setValue(const int, const int);
+	//Überprüfe gültigkeit der Sequenz
+	inline int checkSequenz(int, int);
 
 public:
 	SequenzCreator( int );

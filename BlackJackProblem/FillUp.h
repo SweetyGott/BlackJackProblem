@@ -18,5 +18,5 @@ private:
 	ofstream myfile;
 
 	void nextnum(int = 0);
-	bool checkNumPlayer( int );
+	inline bool checkNumPlayer( int );
 };

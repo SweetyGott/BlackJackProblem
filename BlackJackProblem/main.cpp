@@ -8,7 +8,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-	int n = 2;
+	int n = 4;
 	int e = 9;
 	for (int i = n; i <= e; i++) {
 		SequenzCreator* SequenzCreate = new SequenzCreator(i);

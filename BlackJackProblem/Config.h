@@ -10,7 +10,6 @@ ManualSet, das sind die Karten in nicht S und B
 Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
 */
 #ifdef T_4567
-
 	#define F 5		//Szenario 4,5,6,7
 	#define STARTWERT_MASK 0xAAF0
 	#define Manual1 4

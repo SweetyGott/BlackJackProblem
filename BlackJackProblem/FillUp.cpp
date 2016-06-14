@@ -129,7 +129,7 @@ void FillUp::nextnum(int num ) {
 }
 
 // arg Anzahl Spieler: Anzahl der SPieler gegen die Bank
-bool FillUp::checkNumPlayer(int anzspieler) {
+inline bool FillUp::checkNumPlayer(int anzspieler) {
 	/**Es reicht aus auf nur ein Ass zu testen
 	Bei mehreren kann nur ein Ass als Zehner wirken
 	**/

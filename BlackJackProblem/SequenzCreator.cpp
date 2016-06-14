@@ -68,7 +68,7 @@ SequenzCreator::SequenzCreator( int _n ) {
 
 
 
-int SequenzCreator::checkSequenz( int i, int confirmed ) {
+inline int SequenzCreator::checkSequenz( int i, int confirmed ) {
 	for (int k = confirmed; k <= i; k++) { //Teste für alle Startpunkte ab confirmed die Fole
 		int sum = 0;
 		for (int l = k; l <= i; l++) { //Teste Folge für spezifischen Startpunkt k
