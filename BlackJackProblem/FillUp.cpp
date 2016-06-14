@@ -4,13 +4,13 @@
 #include <iostream> 
 #include <string>
 using namespace std;
-FillUp::FillUp( SequenzCreator* sC, int n ) {
+FillUp::FillUp( SequenzCreator* sC, uint8_t n ) {
 	//Erfolg-Niederlage
 	globsucces = 0;
 	globfail = 0;
 
 	//Startpunkte der Spieler
-	for (int i = 0; i < 7; i++) {
+	for (uint8_t i = 0; i < 7; i++) {
 		points[i] = 0;
 		success[i] = 0;
 	}
@@ -19,14 +19,43 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 	s += "SolutionFinal";
 	myfile.open( s + to_string(n) + ".txt" );
 	
-	int z = 1;
+	uint8_t z = 1;
 	//Alle Lösungen testen
-	for (int i = 0; i < sC->getAnzahlSol(); i++) {
+	for (uint64_t i = 0; i < sC->getAnzahlSol(); i++) {
 		//Progress-Output
 		if (i / (double)sC->getAnzahlSol() > z / (double)10) {
-			cout << z << "0%, done!" << endl;
+			cout << (int)z << "0%, done!" << endl;
 			z++;
 		}
+
+		//Zu setzende Spielerkarten bei 4,5,6,7
+#ifdef T_4567
+		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[8];
+#endif
+		//Zu setzende Spielerkarten bei 5,6,7
+#ifdef T_567
+		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[4];
+		tocards[5] = &sol->seq[8];
+		tocards[6] = &sol->seq[9];
+		tocards[7] = &sol->seq[10];
+#endif
+		//Zu setzende Spielerkarten bei 4,6,7
+#ifdef T_467
+		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[5];
+		tocards[5] = &sol->seq[8];
+#endif
 
 		//PointerStruktur
 		sol = sC->getSolution(i);
@@ -45,34 +74,7 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 			nextnum();
 		}
 
-		//Zu setzende Spielerkarten bei 4,5,6,7
-		#ifdef T_4567
-			tocards[0] = &sol->seq[0];
-			tocards[1] = &sol->seq[1];
-			tocards[2] = &sol->seq[2];
-			tocards[3] = &sol->seq[3];
-			tocards[4] = &sol->seq[8];
-		#endif
-		//Zu setzende Spielerkarten bei 5,6,7
-		#ifdef T_567
-			tocards[0] = &sol->seq[0];
-			tocards[1] = &sol->seq[1];
-			tocards[2] = &sol->seq[2];
-			tocards[3] = &sol->seq[3];
-			tocards[4] = &sol->seq[4];
-			tocards[5] = &sol->seq[8];
-			tocards[6] = &sol->seq[9];
-			tocards[7] = &sol->seq[10];
-		#endif
-		//Zu setzende Spielerkarten bei 4,6,7
-		#ifdef T_467
-			tocards[0] = &sol->seq[0];
-			tocards[1] = &sol->seq[1];
-			tocards[2] = &sol->seq[2];
-			tocards[3] = &sol->seq[3];
-			tocards[4] = &sol->seq[5];
-			tocards[5] = &sol->seq[8];
-		#endif
+		
 		
 
 	}
@@ -81,12 +83,12 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 	myfile << "Finished -- " << globsucces << " Loesungen gefunden -- " << globfail << " gescheitert!" << endl;
 	myfile << "Erfolgsquote bei " << globsucces / (double)(globsucces + globfail) << endl;
 	for (int i = 0; i < 7; i++) {
-		myfile << "Für " << i+1 << " Spieler: " << success[i] << "Lösungen gefunden" << endl;
+		myfile << "Für " << (int)(i+1) << " Spieler: " << success[i] << "Lösungen gefunden" << endl;
 	}
 	myfile.close();
 }
 
-void FillUp::nextnum(int num ) {
+void FillUp::nextnum(uint8_t num ) {
 	//Setzen der F freien Variablen
 	if (num < F) {
 		for (int i = 1; i <= 10; i++) {
@@ -113,13 +115,13 @@ void FillUp::nextnum(int num ) {
 		) {
 			globsucces++;
 			
-			char s[61];
+			char s[2*NumCards-1];
 			for (int j = 0; j < 30; j++) {
 				s[2 * j] = '0' + sol->seq[j];
 				s[2 * j + 1] = '\t';
 			}
-			s[59] = '\n';
-			s[60] = '\0';
+			s[NumCards*2-1] = '\n';
+			s[NumCards*2] = '\0';
 			myfile << s;
 		}
 		else {
@@ -129,12 +131,8 @@ void FillUp::nextnum(int num ) {
 }
 
 // arg Anzahl Spieler: Anzahl der SPieler gegen die Bank
-inline bool FillUp::checkNumPlayer(int anzspieler) {
-	/**Es reicht aus auf nur ein Ass zu testen
-	Bei mehreren kann nur ein Ass als Zehner wirken
-	**/
-	bool ass = false;
-
+inline bool FillUp::checkNumPlayer(uint8_t anzspieler) {
+	bool ass;
 	int start = anzspieler * 2 + 2;
 	int latestplay = start;
 
@@ -143,20 +141,25 @@ inline bool FillUp::checkNumPlayer(int anzspieler) {
 		if (sol->seq[i] == 1 || sol->seq[(anzspieler + 1) + i] == 1) {
 			ass = true;
 		}
+		else {
+			ass = false;
+		}
 		points[i] = sol->seq[i] + sol->seq[(anzspieler + 1) + i];
 
 		int l;
-		for (int j = start; j <= latestplay; j++) {	//Jeden Einstiegspunkt durchlaufen
+		for (uint8_t j = start; j <= latestplay; j++) {	//Jeden Einstiegspunkt durchlaufen
 			//Test auf 21			
-			int k = points[i];
+			uint8_t k = points[i];
 			l = 0;
 			while ( k < 21 && j+l < NumCards ) {
+				//Neue Karte ein Ass?
 				if (sol->seq[j + l] == 1) {
 					ass = true;
 				}
+				//Karte zuweisen
 				k += sol->seq[j + l];
 				l++;
-
+				//Test
 				if (ass && k == 11) {
 					return false; //Falls Ass im Deck und 11 erreicht werden kann
 				}

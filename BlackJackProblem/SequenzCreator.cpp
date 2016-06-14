@@ -8,17 +8,17 @@
 
 using namespace std;
 
-SequenzCreator::SequenzCreator( int _n ) {
+SequenzCreator::SequenzCreator( uint8_t _n ) {
 	//Sequenz mit 2 folgenden Werten oder nur einem 
-	if (Ass == 0) {
+#if Ass == 0	
 		n = _n;
 		n_big = _n;
-	}
-	else {
+#else
 		n = _n;
 		n_big = _n + 10;
-	}
-	//Werte der Bank
+#endif
+	
+		//Werte der Bank
 	j2 = 1;
 	j1 = 21 - n_big - j2;
 
@@ -26,36 +26,31 @@ SequenzCreator::SequenzCreator( int _n ) {
 
 	//Measurement
 	gesamtTest = 0;
-	for (int i = 0; i < NumCards - SeqStart + 1; i++) {
+	for (uint8_t i = 0; i < NumCards - SeqStart + 1; i++) {
 		tiefe[i] = 0;
 	}
 
 
 	//Setzen der verblibenden karten
 	//Indexshift um -1
-	for (int i = 0; i < 9; i++) {
+	for (uint8_t i = 0; i < 9; i++) {
 		temp_sol.stack[i] = 4;
 	}
 	temp_sol.stack[9] = 16;
-
-	//set_mask = (0);
-
-	startwert_mask = (STARTWERT_MASK);
 
 	//Outputfile der Sequenzen vorbereiten
 	numData = 0;
 	s = PATH;
 	s += "SolutionSequenz";
-	//s += '0' + n;
 	se = ".txt";
 	myfile.open( s + to_string(n) + "-" + to_string(numData) + se );
 
 	//Setzen der Werte
 	setValue( SeqStart, SeqStart );
-	cout << "Sequenzen fertig mit " << n << " -- " << numSolutions << " Sequenzen gefunden!" << endl;
+	cout << "Sequenzen fertig mit " << to_string(n) << " -- " << numSolutions << " Sequenzen gefunden!" << endl;
 	myfile << "Sequenzen fertig -- " << numSolutions << "  Sequenzen gefunden!" << endl;
 	uint64_t temp = 0;
-	for (int i = 0; i < NumCards - SeqStart; i++) {
+	for (uint8_t i = 0; i < NumCards - SeqStart; i++) {
 		myfile << "In Tiefe " << i << ":\t" << tiefe[i] << " mal abgebrochen" << endl;
 		temp += tiefe[i]*i;
 	}
@@ -68,28 +63,28 @@ SequenzCreator::SequenzCreator( int _n ) {
 	
 }
 
-
-
-inline int SequenzCreator::checkSequenz( int i, int confirmed ) {
-	for (int k = confirmed; k <= i; k++) { //Teste f¸r alle Startpunkte ab confirmed die Fole
-		int sum = 0;
-		for (int l = k; l <= i; l++) { //Teste Folge f¸r spezifischen Startpunkt k
+//i ist die aktuelle Karte
+/*confirmed is kleiner als i und die karte
+bei der als n‰chste die G¸ltiigkeit der Sequenz ¸berpr¸ft werden muss.
+Der Rest davor wurde bereits best‰tigt*/
+inline int SequenzCreator::checkSequenz(uint8_t i, uint8_t confirmed ) {
+	for (uint8_t k = confirmed; k <= i; k++) { //Teste f¸r alle Startpunkte ab confirmed die Fole
+		uint8_t sum = 0;
+		for (uint8_t l = k; l <= i; l++) { //Teste Folge f¸r spezifischen Startpunkt k
 			sum += temp_sol.seq[l];
 			//Falls die bank in der Startbelegung gar kein Ass hat
-			if (Ass == 0 && n > 10 && temp_sol.seq[l] == 1) {
+#if Ass == 0
+			if (n > 10 && temp_sol.seq[l] == 1) {
 				n -= 10;
 			}
+#endif
 			if (sum == n || sum == n_big) {
 				//belegung passt
 				if (k == confirmed) {
 					confirmed++;
-					break;
 				}
-				else {
-					return confirmed;
-				}
-			}
-			else if (sum >= n_big) {
+				break;
+			} else if (sum >= n_big) {
 				//diese Belegung passt nicht, gehe zur n‰chsten Belegung
 				return -1;
 			}
@@ -101,15 +96,15 @@ inline int SequenzCreator::checkSequenz( int i, int confirmed ) {
 
 
 
-void SequenzCreator::setValue(const int i, const int _confirmed) {
+void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 	//Jede Karte einen Wert Zuweisen
 	if (i < NumCards) {
 		//Vordefinierte Werte, die gesetzt werden
-		if ( startwert_mask[i]  /*&& !set_mask[i]*/ ) {
+		if ( i == Bank1 || i == Bank2 || i ==  Bank3 ) {
 			//In der Folge wird immer der Wert n_big erreicht, als Startwert braucht somit die Bank immer 
 			//21-n_big Punkte verteilt auf einmal Ass(1) und einmal (21-n_big-1) Punkte
-			short p2 = i;
-			short p1 = (i - 1) / 2;
+			uint8_t p2 = i;
+			uint8_t p1 = (i - 1) / 2;
 			
 
 			if (temp_sol.stack[j2-1] > 0 && temp_sol.stack[j1 - 1] > 0 ) {
@@ -134,10 +129,13 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 				confirmed = checkSequenz(i, _confirmed);
 				if (confirmed != -1) {
 					setValue(i + 1, confirmed);
-				} else {
+				} 
+#if MEASURE == 1
+				else {
 					tiefe[i - SeqStart]++;
 					gesamtTest++;
 				}
+#endif
 				temp_sol.stack[j2 - 1]++;
 				temp_sol.stack[j1 - 1]++;
 			}
@@ -154,10 +152,13 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 
 					if (confirmed != -1) {
 						setValue(i + 1, confirmed);
-					} else {
+					} 
+#if MEASURE == 1
+					else {
 						tiefe[i - SeqStart]++;
 						gesamtTest++;
 					}
+#endif
 					temp_sol.stack[j-1]++;
 				}
 			}
@@ -166,14 +167,16 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 		tiefe[NumCards - SeqStart]++;
 		gesamtTest++;
 		//Alle Karten in der Sequenz belegt
-		//Write to File
+		//Zur Vermeidung einer groﬂen Datei werden viele kleine Dateien angelegt
 		if ((numSolutions + 1) % 500000 == 0) {
 			myfile.close();
 			numData++;
 			myfile.open(s + to_string(n) + "-" + to_string(numData) + se);
 		}
+
+		//Generate String
 		char s[2*NumCards + 1];
-		for (int j = 0; j < NumCards; j++) {
+		for (uint8_t j = 0; j < NumCards; j++) {
 			s[2 * j] = '0' + temp_sol.seq[j];
 			s[2 * j + 1] = '\t';
 		}
@@ -189,9 +192,7 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 		else {
 			cout << "maximale Anzahl an Lˆsunge gefunden, Speicherproblem" << endl;
 			myfile << "maximale Anzahl an Lˆsunge gefunden, Speicherproblem" << endl;
-			return;
 		}
-		
 	}
 }
 

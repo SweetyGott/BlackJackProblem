@@ -5,18 +5,18 @@
 class FillUp {
 
 public:
-	FillUp( SequenzCreator*, int );
+	FillUp( SequenzCreator*, uint8_t);
 private:
 
 	uint64_t globsucces, globfail;
 	solution* sol;
-	int* tocards[F];//Zu setzende Karten
-	int points[7];	//Punktestand der einzelnen Spieler
+	uint8_t* tocards[F];//Zu setzende Karten
+	uint8_t points[7];	//Punktestand der einzelnen Spieler
 	
 	uint64_t success[7];//Wie viele Erfolglösungen für den einzelnen Spieler gefunden wurden
 
 	ofstream myfile;
 
-	void nextnum(int = 0);
-	inline bool checkNumPlayer( int );
+	void nextnum(uint8_t = 0);
+	inline bool checkNumPlayer(uint8_t);
 };

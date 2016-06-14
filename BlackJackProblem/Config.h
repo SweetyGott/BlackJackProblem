@@ -1,6 +1,13 @@
 #pragma once
 
+#include <stdint.h>
+
+//SZENARIO AUSWAHL
+//#define T_4567
+//#define T_567
 #define T_467
+
+
 
 /*Szenario 4,5,6,7
 0000 1111 0101 0101
@@ -10,8 +17,10 @@ ManualSet, das sind die Karten in nicht S und B
 Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
 */
 #ifdef T_4567
-	#define F 5		//Szenario 4,5,6,7
-	#define STARTWERT_MASK 0xAAF0
+	#define F 5	
+	#define Bank1 11
+	#define Bank2 13
+	#define Bank3 15
 	#define Manual1 4
 	#define Manual2 9
 	#define SeqStart 10
@@ -27,8 +36,10 @@ ManualSet, das sind die Karten in nicht S und B
 Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
 */
 #ifdef T_567
-	#define F 8		//Szenario 5,6,7
-	#define STARTWERT_MASK 0xA8E0
+	#define F 8
+	#define Bank1 13
+	#define Bank2 15
+	#define Bank3 13
 	#define Manual1 5
 	#define Manual2 11
 #define SeqStart 12
@@ -46,8 +57,10 @@ ManualSet, das sind die Karten in nicht S und B
 Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
 */
 #ifdef T_467
-	#define F 6		//Szenario 4,6,7
-	#define STARTWERT_MASK 0xA2D0
+	#define F 6	
+	#define Bank1 13
+	#define Bank2 15
+	#define Bank3 13
 	#define Manual1 4
 	#define Manual2 9
 	#define SeqStart 10
@@ -69,6 +82,6 @@ Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
 
 //struct
 struct solution {
-	int seq[NumCards];
-	int stack[10];
+	uint8_t seq[NumCards];
+	uint8_t stack[10];
 };

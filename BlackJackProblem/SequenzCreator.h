@@ -16,8 +16,8 @@ class SequenzCreator {
 		* erzeugt Sequenz von 20 Elementen, wobei immer n oder n+10 erreicht werden kann
 	*/
 private:
-	int n, n_big;
-	int j1, j2;
+	uint8_t n, n_big;
+	uint8_t j1, j2;
 
 	solution temp_sol;
 
@@ -29,23 +29,23 @@ private:
 	ofstream myfile;
 
 	//Bitmaske für die Karten, welche durch die Bank definiert werden (Menge B)
-	std::bitset<NumCards> startwert_mask;
+	//std::bitset<NumCards> startwert_mask;
 
 	//Measuring
 	uint64_t gesamtTest;
 	uint64_t tiefe[NumCards - SeqStart + 1];
 
 	//Dateiausgabe
-	int numData;
+	unsigned numData;
 	string s, se;
 
 	//Nächste Karte für die Sequenz setzen
-	void setValue(const int, const int);
+	void setValue(const uint8_t, const uint8_t);
 	//Überprüfe gültigkeit der Sequenz
-	inline int checkSequenz(int, int);
+	inline int checkSequenz(uint8_t, uint8_t);
 
 public:
-	SequenzCreator( int );
+	SequenzCreator( uint8_t );
 	solution* getSolution(uint64_t);
 	uint64_t getAnzahlSol();
 
