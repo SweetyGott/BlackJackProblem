@@ -46,29 +46,33 @@ FillUp::FillUp( SequenzCreator* sC, int n ) {
 		}
 
 		//Zu setzende Spielerkarten bei 4,5,6,7
-		/*tocards[0] = &sol->seq[0];
-		tocards[1] = &sol->seq[1];
-		tocards[2] = &sol->seq[2];
-		tocards[3] = &sol->seq[3];
-		tocards[4] = &sol->seq[8];*/
-
+		#ifdef T_4567
+			tocards[0] = &sol->seq[0];
+			tocards[1] = &sol->seq[1];
+			tocards[2] = &sol->seq[2];
+			tocards[3] = &sol->seq[3];
+			tocards[4] = &sol->seq[8];
+		#endif
 		//Zu setzende Spielerkarten bei 5,6,7
-		/*tocards[0] = &sol->seq[0];
-		tocards[1] = &sol->seq[1];
-		tocards[2] = &sol->seq[2];
-		tocards[3] = &sol->seq[3];
-		tocards[4] = &sol->seq[4];
-		tocards[5] = &sol->seq[8];
-		tocards[6] = &sol->seq[9];
-		tocards[7] = &sol->seq[10];*/
-
+		#ifdef T_567
+			tocards[0] = &sol->seq[0];
+			tocards[1] = &sol->seq[1];
+			tocards[2] = &sol->seq[2];
+			tocards[3] = &sol->seq[3];
+			tocards[4] = &sol->seq[4];
+			tocards[5] = &sol->seq[8];
+			tocards[6] = &sol->seq[9];
+			tocards[7] = &sol->seq[10];
+		#endif
 		//Zu setzende Spielerkarten bei 4,6,7
-		tocards[0] = &sol->seq[0];
-		tocards[1] = &sol->seq[1];
-		tocards[2] = &sol->seq[2];
-		tocards[3] = &sol->seq[3];
-		tocards[4] = &sol->seq[5];
-		tocards[5] = &sol->seq[8];
+		#ifdef T_467
+			tocards[0] = &sol->seq[0];
+			tocards[1] = &sol->seq[1];
+			tocards[2] = &sol->seq[2];
+			tocards[3] = &sol->seq[3];
+			tocards[4] = &sol->seq[5];
+			tocards[5] = &sol->seq[8];
+		#endif
 		
 
 	}
@@ -96,7 +100,17 @@ void FillUp::nextnum(int num ) {
 	}
 	//Teste die Möglichkeit
 	else {
-		if ( checkNumPlayer(4) && /*checkNumPlayer(5) && */checkNumPlayer(6) && checkNumPlayer(7)) {
+		if ( 
+			#ifdef T_4567
+						checkNumPlayer(4) && checkNumPlayer(5) && checkNumPlayer(6) && checkNumPlayer(7)
+			#endif
+			#ifdef T_567
+						checkNumPlayer(5) && checkNumPlayer(6) && checkNumPlayer(7)
+			#endif
+			#ifdef T_467
+						checkNumPlayer(4) && checkNumPlayer(6) && checkNumPlayer(7)
+			#endif	
+		) {
 			globsucces++;
 			
 			char s[61];
