@@ -23,16 +23,15 @@ private:
 	uint64_t numSolutions;
 
 	std::vector<solution> sol;
-	std::bitset<NumCards> set_mask;
+	//std::bitset<NumCards> set_mask;
 
 	ofstream myfile;
 
 
-	void setValue( const int = 0, const int = 0 );
+	void setValue( const int, const int );
 	int checkSequenz(int, int);
 
 	std::bitset<NumCards> startwert_mask;
-	std::bitset<NumCards> manual_mask;
 
 	//Measuring
 	uint64_t gesamtTest;

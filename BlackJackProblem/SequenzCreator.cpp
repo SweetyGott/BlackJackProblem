@@ -11,8 +11,8 @@ using namespace std;
 SequenzCreator::SequenzCreator( int _n ) {
 	//Sequenz mit 2 folgenden Werten oder nur einem 
 	if (Ass == 0) {
-		n = _n + 10;
-		n_big = _n + 10;
+		n = _n;
+		n_big = _n;
 	}
 	else {
 		n = _n;
@@ -36,10 +36,9 @@ SequenzCreator::SequenzCreator( int _n ) {
 	}
 	temp_sol.stack[9] = 16;
 
-	set_mask = (0);
+	//set_mask = (0);
 
 	startwert_mask = (STARTWERT_MASK);
-	manual_mask = (MANUAL_MASK);
 
 	//Outputfile der Sequenzen vorbereiten
 	numData = 0;
@@ -104,7 +103,7 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 	//Jede Karte einen Wert Zuweisen
 	if (i < NumCards) {
 		//Vordefinierte Werte, die gesetzt werden
-		if ( startwert_mask[i]  && !set_mask[i] ) {
+		if ( startwert_mask[i]  /*&& !set_mask[i]*/ ) {
 			//In der Folge wird immer der Wert n_big erreicht, als Startwert braucht somit die Bank immer 
 			//21-n_big Punkte verteilt auf einmal Ass(1) und einmal (21-n_big-1) Punkte
 			short p2 = i;
@@ -115,8 +114,8 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 			if (temp_sol.stack[j2-1] > 0 && temp_sol.stack[j1 - 1] > 0 ) {
 				temp_sol.stack[j2 - 1]--;
 				temp_sol.stack[j1 - 1]--;
-				set_mask[p1] = true;
-				set_mask[p2] = true;
+				//set_mask[p1] = true;
+				//set_mask[p2] = true;
 
 				//Zwei Startwerte setzen
 				temp_sol.seq[p1] = j2;
@@ -141,8 +140,8 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 					gesamtTest++;
 				}
 
-				set_mask[p1] = false;
-				set_mask[p2] = false;
+				//set_mask[p1] = false;
+				//set_mask[p2] = false;
 				temp_sol.stack[j2 - 1]++;
 				temp_sol.stack[j1 - 1]++;
 			}
@@ -175,7 +174,7 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 		if ((numSolutions + 1) % 500000 == 0) {
 			myfile.close();
 			numData++;
-			myfile.open(s + to_string(numData) + se);
+			myfile.open(s + to_string(n) + "-" + to_string(numData) + se);
 		}
 		char s[2*NumCards + 1];
 		for (int j = 0; j < NumCards; j++) {
@@ -189,13 +188,13 @@ void SequenzCreator::setValue(const int i, const int _confirmed) {
 		//Write to SolutionVector
 		if(sol.size() <= sol.max_size()) {
 			sol.push_back(temp_sol);
+			numSolutions++;
 		}
 		else {
 			cout << "maximale Anzahl an Lösunge gefunden, Speicherproblem" << endl;
+			myfile << "maximale Anzahl an Lösunge gefunden, Speicherproblem" << endl;
 			return;
 		}
-		
-		numSolutions++;
 		
 	}
 }
@@ -206,5 +205,8 @@ solution* SequenzCreator::getSolution( uint64_t i ) {
 
 
 uint64_t SequenzCreator::getAnzahlSol() {
-	return numSolutions;
+	if (numSolutions != sol.size()) {
+		cout << "größenFehler in Sequenzcreator getAnzahl sol" << endl;
+	}
+	return sol.size();
 }
