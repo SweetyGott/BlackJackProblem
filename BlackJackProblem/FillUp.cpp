@@ -28,6 +28,10 @@ FillUp::FillUp( SequenzCreator* sC, uint8_t n ) {
 			z++;
 		}
 
+
+		//PointerStruktur
+		sol = sC->getSolution(i);
+
 		//Zu setzende Spielerkarten bei 4,5,6,7
 #ifdef T_4567
 		tocards[0] = &sol->seq[0];
@@ -56,9 +60,6 @@ FillUp::FillUp( SequenzCreator* sC, uint8_t n ) {
 		tocards[4] = &sol->seq[5];
 		tocards[5] = &sol->seq[8];
 #endif
-
-		//PointerStruktur
-		sol = sC->getSolution(i);
 		
 		//Zu setzende Bankstartkarten
 		if (sol->stack[0] > 0 && sol->stack[11 - n - 2] > 0) {
@@ -115,13 +116,17 @@ void FillUp::nextnum(uint8_t num ) {
 		) {
 			globsucces++;
 			
-			char s[2*NumCards-1];
-			for (int j = 0; j < 30; j++) {
+			char s[2*NumCards+1];
+			for (int j = 0; j < NumCards; j++) {
 				s[2 * j] = '0' + sol->seq[j];
 				s[2 * j + 1] = '\t';
 			}
 			s[NumCards*2-1] = '\n';
 			s[NumCards*2] = '\0';
+			if (globsucces == 1) {
+				cout << "Erste Lösung gefunden!" << endl;
+				cout << s;
+			}
 			myfile << s;
 		}
 		else {
