@@ -60,23 +60,35 @@ FillUp::FillUp( SequenzCreator* sC, uint8_t n ) {
 		tocards[4] = &sol->seq[5];
 		tocards[5] = &sol->seq[8];
 #endif
+		//Zu setzende Spielerkarten bei 6,7
+#ifdef T_67
+		tocards[0] = &sol->seq[0];
+		tocards[1] = &sol->seq[1];
+		tocards[2] = &sol->seq[2];
+		tocards[3] = &sol->seq[3];
+		tocards[4] = &sol->seq[4];
+		tocards[5] = &sol->seq[5];
+		tocards[6] = &sol->seq[8];
+		tocards[7] = &sol->seq[9];
+		tocards[8] = &sol->seq[10];
+		tocards[9] = &sol->seq[11];
+		tocards[10] = &sol->seq[12];
+#endif
 		
 		//Zu setzende Bankstartkarten
 		if (sol->stack[0] > 0 && sol->stack[11 - n - 2] > 0) {
 			sol->stack[0]--;
 			sol->stack[11 - n - 2]--;
-
+#if SECOND_ASS != 1
 			sol->seq[Manual1] = 1;
 			sol->seq[Manual2] = 10 - n;
 			nextnum();
-
+#endif
 			sol->seq[Manual2] = 1;
 			sol->seq[Manual1] = 10 - n;
 			nextnum();
 		}
 
-		
-		
 
 	}
 	
@@ -112,7 +124,11 @@ void FillUp::nextnum(uint8_t num ) {
 			#endif
 			#ifdef T_467
 						checkNumPlayer(4) && checkNumPlayer(6) && checkNumPlayer(7)
+			#endif
+			#ifdef T_67
+						checkNumPlayer(6) && checkNumPlayer(7)
 			#endif	
+
 		) {
 			globsucces++;
 			
@@ -155,6 +171,9 @@ inline bool FillUp::checkNumPlayer(uint8_t anzspieler) {
 		for (uint8_t j = start; j <= latestplay; j++) {	//Jeden Einstiegspunkt durchlaufen
 			//Test auf 21			
 			uint8_t k = points[i];
+			if (k == 11 && ass) {
+				return false;
+			}
 			l = 0;
 			while ( k < 21 && j+l < NumCards ) {
 				//Neue Karte ein Ass?

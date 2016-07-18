@@ -111,17 +111,23 @@ void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 				temp_sol.stack[j2 - 1]--;
 				temp_sol.stack[j1 - 1]--;
 
+				int confirmed;
+#if SECOND_ASS != 1
 				//Zwei Startwerte setzen
 				temp_sol.seq[p1] = j2;
 				temp_sol.seq[p2] = j1;
-				/**CHECK**/
-				int confirmed = checkSequenz(i, _confirmed);
+				//**CHECK/
+				confirmed = checkSequenz(i, _confirmed);
 				if (confirmed != -1) {
 					setValue(i + 1, confirmed);
-				} else {
+				}
+#if MEASURE == 1
+				else {
 					tiefe[i - SeqStart]++;
 					gesamtTest++;
 				}
+#endif
+#endif
 				//Umgekehrt testen
 				temp_sol.seq[p1] = j1;
 				temp_sol.seq[p2] = j2;

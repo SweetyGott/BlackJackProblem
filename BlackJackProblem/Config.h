@@ -6,6 +6,7 @@
 //#define T_4567
 //#define T_567
 #define T_467
+//#define T_67
 
 
 
@@ -67,12 +68,34 @@ Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
 #endif
 
 
+/*0xA2D0 setzt die Bits der Bankkarte
+zu setzenden Bits entsprechen; 4,6,7
+0000 1011 0100 0101
+in BigEndian
+0xA2D0
+Freie Karten für die Spieler, die zu setzen sind.
+ManualSet, das sind die Karten in nicht S und B
+Punkt ab dem die Sequenzfolge zum einsteigen berechnet wird
+*/
+#ifdef T_67
+#define F 11	
+#define Bank1 15
+#define Bank2 15
+#define Bank3 15
+#define Manual1 6
+#define Manual2 13
+#define SeqStart 14
+#endif
+
 
 //Sequenzlänge die wir berechnenen
 #define NumCards 30
 
 //Bank im besizt eines Ass?
 #define Ass 1
+
+//Nur ndie zweite Hand wird ein Ass
+//#define SECOND_ASS 1
 
 //Messen von Effizienzwerten - 1 = true
 #define MEASURE 1
