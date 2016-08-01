@@ -31,11 +31,12 @@ SequenzCreator::SequenzCreator( uint8_t _n ) {
 	}
 
 
-	//Setzen der verblibenden karten
+	//Setzen der verpgbaren karten
 	//Indexshift um -1
 	for (uint8_t i = 0; i < 9; i++) {
 		temp_sol.stack[i] = 4;
 	}
+	//16 Karten vom Wert 10
 	temp_sol.stack[9] = 16;
 
 	//Outputfile der Sequenzen vorbereiten
@@ -97,7 +98,7 @@ inline int SequenzCreator::checkSequenz(uint8_t i, uint8_t confirmed ) {
 
 
 void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
-	//Jede Karte einen Wert Zuweisen
+	//Ein Tiefe absteigen, solange nicht die unterste Ebene erreicht wurde
 	if (i < NumCards) {
 		//Vordefinierte Werte, die gesetzt werden
 		if ( i == Bank1 || i == Bank2 || i ==  Bank3 ) {
@@ -112,11 +113,13 @@ void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 				temp_sol.stack[j1 - 1]--;
 
 				int confirmed;
+/* Falls die Bank nur in der ersten Karte und nicht in der zweiten Karte der Starthand ein Ass besitzend darf, 
+sonst braucht dieser Fall nicht berücksichtigt zu werden*/
 #if SECOND_ASS != 1
-				//Zwei Startwerte setzen
+				//Zwei Startkarten für die Starthand der bank setzen
 				temp_sol.seq[p1] = j2;
 				temp_sol.seq[p2] = j1;
-				//**CHECK/
+				//**CHECK, ob die Sequenzeneigenschaft noch erfüllt wird/
 				confirmed = checkSequenz(i, _confirmed);
 				if (confirmed != -1) {
 					setValue(i + 1, confirmed);
@@ -128,10 +131,10 @@ void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 				}
 #endif
 #endif
-				//Umgekehrt testen
+				//Vertauschen der beiden Startkarten
 				temp_sol.seq[p1] = j1;
 				temp_sol.seq[p2] = j2;
-				/**CHECK**/
+				/**CHECK, ob die Sequenzeneigenschaft noch erfüllt wird**/
 				confirmed = checkSequenz(i, _confirmed);
 				if (confirmed != -1) {
 					setValue(i + 1, confirmed);
@@ -146,9 +149,9 @@ void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 				temp_sol.stack[j1 - 1]++;
 			}
 		} else {
-			//versch. Werte durchtesten
+			//versch. Kartewerte für die nächste Karte in S durchtesten
 			for (int j = 1; j <= 10; j++) {
-				if (temp_sol.stack[j-1] > 0) {
+				if (temp_sol.stack[j-1] > 0) { //Falls der Kartenwert noch verfügbar
 					//Wert setzen
 					temp_sol.stack[j-1]--;
 					temp_sol.seq[i] = j;
@@ -170,10 +173,11 @@ void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 			}
 		}
 	} else {
+		/**Es wurde eine neue Sequnez gefunden, s**/
 		tiefe[NumCards - SeqStart]++;
 		gesamtTest++;
 		//Alle Karten in der Sequenz belegt
-		//Zur Vermeidung einer großen Datei werden viele kleine Dateien angelegt
+		//Zur Vermeidung einer großen Datei, werden viele kleine Dateien angelegt
 		if ((numSolutions + 1) % 500000 == 0) {
 			myfile.close();
 			numData++;
@@ -202,11 +206,12 @@ void SequenzCreator::setValue(const uint8_t i, const uint8_t _confirmed) {
 	}
 }
 
+//Ausgabe eine spzifischen Lösung an das FillUp-Objekt
 solution* SequenzCreator::getSolution( uint64_t i ) {
 	return &sol[(unsigned)i];
 }
 
-
+//Anzahl an gefundenen Lösungen
 uint64_t SequenzCreator::getAnzahlSol() {
 	if (numSolutions != sol.size()) {
 		cout << "größenFehler in Sequenzcreator getAnzahl sol" << endl;

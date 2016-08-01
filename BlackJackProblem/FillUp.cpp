@@ -75,7 +75,7 @@ FillUp::FillUp( SequenzCreator* sC, uint8_t n ) {
 		tocards[10] = &sol->seq[12];
 #endif
 		
-		//Zu setzende Bankstartkarten
+		//Zu setzende Bankstartkarten, die nicht in der Sequnez liegen.
 		if (sol->stack[0] > 0 && sol->stack[11 - n - 2] > 0) {
 			sol->stack[0]--;
 			sol->stack[11 - n - 2]--;
@@ -113,7 +113,7 @@ void FillUp::nextnum(uint8_t num ) {
 			}
 		}
 	}
-	//Teste die Möglichkeit
+	//Teste die Möglichkeit auf die einzelnen Spieler n in N
 	else {
 		if ( 
 			#ifdef T_4567
@@ -130,6 +130,7 @@ void FillUp::nextnum(uint8_t num ) {
 			#endif	
 
 		) {
+			/*Lösung gefunden, Ausgabe dieser*/
 			globsucces++;
 			
 			char s[2*NumCards+1];
@@ -165,6 +166,7 @@ inline bool FillUp::checkNumPlayer(uint8_t anzspieler) {
 		else {
 			ass = false;
 		}
+		//Startpunktzahl der SPieler i bei n Spielern
 		points[i] = sol->seq[i] + sol->seq[(anzspieler + 1) + i];
 
 		int l;
@@ -183,7 +185,7 @@ inline bool FillUp::checkNumPlayer(uint8_t anzspieler) {
 				//Karte zuweisen
 				k += sol->seq[j + l];
 				l++;
-				//Test
+				//Falls der Spieler ein Ass auf der Hand hat, so reichen auch 11 Punkte aus, dass ein Spieler gewinnt
 				if (ass && k == 11) {
 					return false; //Falls Ass im Deck und 11 erreicht werden kann
 				}
@@ -192,9 +194,11 @@ inline bool FillUp::checkNumPlayer(uint8_t anzspieler) {
 				return false;
 			}
 		}
+		//Letzte Karte+1, die dieser Spieler ziehen kann und somit die Grenze für den nächsten Spieler i+1 erhöht wird
 		latestplay += l;
 	}
 
+	//Es gab kein Szenario, in welchem ein Spieler gewinnen konnte, es wurde ine Lösung gefunden
 	success[anzspieler - 1]++;
 	return true;
 }

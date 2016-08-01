@@ -10,8 +10,8 @@ private:
 
 	uint64_t globsucces, globfail;
 	solution* sol;
-	uint8_t* tocards[F];//Zu setzende Karten
-	uint8_t points[7];	//Punktestand der einzelnen Spieler
+	uint8_t* tocards[F];//Zu setzende freie Karten
+	uint8_t points[7];	//Punktestand der einzelnen Spieler. Indesverschiebung um -1
 	
 	uint64_t success[7];//Wie viele Erfolglösungen für den einzelnen Spieler gefunden wurden
 
